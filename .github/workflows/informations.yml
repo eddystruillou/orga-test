@@ -1,4 +1,7 @@
+name: Display Informations
+
 on: push
+
 jobs:
   first-job:
     runs-on: ubuntu-latest
