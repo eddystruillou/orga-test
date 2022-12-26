@@ -15,3 +15,5 @@ jobs:
         version=$(cat package.json | jq -r '.version')
     - name: Add tag with version
       run: git tag $version
+    - name: Push tag
+      run: git push origin $version
