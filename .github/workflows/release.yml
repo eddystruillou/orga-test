@@ -1,20 +1,16 @@
 name: Create Release
 
 on:
-  push:
-    branches:
-      - main
+  pull_request:
+    branches: [ main ]
 
 jobs:
   build:
-    name: Create Tag
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
-    - name: Use Klemensas action-autotag to create tag with our GH Token
-      uses: Klemensas/action-autotag@stable
-      with:
-        tag_prefix: "v"
-      env:
-        GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+    - uses: actions/checkout@v2
+    - name: Extract version from package.json
+      run: |
+        version=$(cat package.json | jq -r '.version')
+    - name: Add tag with version
+      run: git tag $version
