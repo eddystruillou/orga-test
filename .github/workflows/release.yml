@@ -10,9 +10,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
+   - name: Get path to package.json
+      run: path=$(git ls-tree HEAD package.json | awk '{print $4}')
     - name: Extract version from package.json
-      run: |
-        version=$(cat package.json | jq -r '.version')
+      run: version=$(cat $path | jq -r '.version')
     - name: Print version
       run: echo "Version -> $version"
     - name: Add tag with version
