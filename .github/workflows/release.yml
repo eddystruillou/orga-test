@@ -13,16 +13,7 @@ jobs:
     - run: npm install
     - run: node -e "console.log(require('./package.json').version)"
     - name: Create tag
-      id: create_tag
       run: |
         TAG_NAME=$(node -p "require('./package.json').version")
         git tag $TAG_NAME
-    - name: Publish tag
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        tag_name: ${{ steps.create_tag.outputs.TAG_NAME }}
-        release_name: Release $TAG_NAME
-        draft: false
-        prerelease: false
+        git push origin $TAG_NAME
