@@ -15,7 +15,7 @@ jobs:
     - name: Extract version from package.json
       run: version=$(node -p "const fs = require('fs'); const pkg = JSON.parse(fs.readFileSync('$path', 'utf8')); pkg.version")
     - name: Print version
-      run: echo "Version: $version"
+      run: echo "Version $version"
     - name: Add tag with version
       run: git tag $version
     - name: Push tag
