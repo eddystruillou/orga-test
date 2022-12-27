@@ -15,8 +15,8 @@ jobs:
     - run: npm install
     - name: Check if version has changed
       run: |
-        PREVIOUS_VERSION=$(git show HEAD~1:package.json | grep -Po '"version": "\K[^"]+')
-        CURRENT_VERSION=$(grep -Po '"version": "\K[^"]+' package.json)
+        PREVIOUS_VERSION=$(git show HEAD~1:package.json | awk '/version/ { gsub(/"/, "", $2); print $2 }')
+        CURRENT_VERSION=$(awk '/version/ { gsub(/"/, "", $2); print $2 }' package.json)
         if [[ $PREVIOUS_VERSION != $CURRENT_VERSION ]]; then
           TAG_NAME=v$CURRENT_VERSION
           git tag $TAG_NAME
