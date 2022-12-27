@@ -17,7 +17,7 @@ jobs:
       id: check_version_change
       run: |
         OLD_VERSION=$(git show HEAD~1:package.json | grep -Po '"version": "\K.*?(?=")')
-        NEW_VERSION=$(grep -Po '"version": "\K.*?(?=")' package.json)
+        NEW_VERSION=$(grep -P -o '"version": "\K.*?(?=")' package.json)
         if [ "$OLD_VERSION" = "$NEW_VERSION" ]; then
           echo "Version has not changed, exiting."
           exit 78
