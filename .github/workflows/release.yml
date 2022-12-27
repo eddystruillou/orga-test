@@ -10,11 +10,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
+    - name: Get path to package.json
+      run: path=$(git ls-tree HEAD package.json | awk '{print $4}')
     - name: Extract version from package.json
-      run: PACKAGE_VERSION=$(cat package.json \ | grep version \ | head -1 \ | awk -F:'{ print $2 }' \ | sed 's/[",]//g')
+      run: version=$(node -p "const fs = require('fs'); const pkg = JSON.parse(fs.readFileSync('$path', 'utf8')); pkg.version")
     - name: Print version
-      run: echo "Version -> $PACKAGE_VERSION"
+      run: echo "Version: $version"
     - name: Add tag with version
-      run: git tag $PACKAGE_VERSION
+      run: git tag $version
     - name: Push tag
-      run: git push origin $PACKAGE_VERSION
+      run: git push origin $version
