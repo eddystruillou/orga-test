@@ -11,9 +11,8 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - run: npm install
-    - run: node -e "console.log(require('./package.json').version)"
     - name: Create tag
       run: |
-        TAG_NAME=$(node -p "require('./package.json').version")
+        TAG_NAME=v$(node -p "require('./package.json').version")
         git tag $TAG_NAME
         git push origin $TAG_NAME
