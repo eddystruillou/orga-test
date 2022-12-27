@@ -11,6 +11,6 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Extract version from package.json
-      run: PACKAGE_VERSION=$(cat package.json \ | grep version \ | head -1 \ | awk -F:'{ print $2 }' \ | sed 's/[",]//g')
+      run: PACKAGE_VERSION=$(cat ../../package.json \ | grep version \ | head -1 \ | awk -F:'{ print $2 }' \ | sed 's/[",]//g')
     - name: Print version
       run: echo "Version $PACKAGE_VERSION"
