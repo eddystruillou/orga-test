@@ -1,11 +1,10 @@
-name: Create Tag
+name: Create Release
 
 on:
   push:
     branches:
       - main
-    paths:
-    - "package.json"
+    types: [closed]
 
 jobs:
   build:
@@ -13,19 +12,8 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - run: npm install
-    - name: Check if version has changed
+    - name: Create tag
       run: |
-        PREVIOUS_VERSION=$(git show HEAD~1:package.json | awk '/version/ { gsub(/"/, "", $2); print $2 }')
-        CURRENT_VERSION=$(awk '/version/ { gsub(/"/, "", $2); print $2 }' package.json)
-        if [[ $PREVIOUS_VERSION != $CURRENT_VERSION ]]; then
-          TAG_NAME=v$CURRENT_VERSION
-          git tag $TAG_NAME
-          git push origin $TAG_NAME
-        else
-          echo "Version has not changed"
-        fi
-    # - name: Create tag
-    #   run: |
-    #     TAG_NAME=v$(node -p "require('./package.json').version")
-    #     git tag $TAG_NAME
-    #     git push origin $TAG_NAME
+        TAG_NAME=v$(node -p "require('./package.json').version")
+        git tag $TAG_NAME
+        git push origin $TAG_NAME
