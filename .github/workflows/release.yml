@@ -11,12 +11,8 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Get path to package.json
-      run: path=$(git ls-tree HEAD package.json | awk '{print $4}')
+      run: path=$(git ls-tree HEAD orga-test/package.json | awk '{print $4}')
     - name: Extract version from package.json
       run: version=$(node -p "const fs = require('fs'); const pkg = JSON.parse(fs.readFileSync('$path', 'utf8')); pkg.version")
     - name: Print version
       run: echo "Version $version"
-    - name: Add tag with version
-      run: git tag $version
-    - name: Push tag
-      run: git push origin $version
