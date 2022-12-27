@@ -10,15 +10,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - name: Get path to package.json
-      run: path=$(git ls-tree HEAD package.json | awk '{print $4}')
-    - name: Print path
-      run: echo "Path -> $path"
     - name: Extract version from package.json
-      run: version=$(cat $path | jq -r '.version')
+      run: PACKAGE_VERSION=$(cat package.json \ | grep version \ | head -1 \ | awk -F:'{ print $2 }' \ | sed 's/[",]//g')
     - name: Print version
-      run: echo "Version -> $version"
+      run: echo "Version -> $PACKAGE_VERSION"
     - name: Add tag with version
-      run: git tag $version
+      run: git tag $PACKAGE_VERSION
     - name: Push tag
-      run: git push origin $version
+      run: git push origin $PACKAGE_VERSION
