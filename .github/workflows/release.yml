@@ -11,6 +11,6 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Extract version from package.json
-      run: PACKAGE_VERSION=$npm pkg get version
+      run: PACKAGE_VERSION=$(npm pkg get version)
     - name: Print version
       run: echo "Version $PACKAGE_VERSION"
