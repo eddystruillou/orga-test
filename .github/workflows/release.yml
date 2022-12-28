@@ -23,9 +23,9 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
       with:
         tag_name: ${{ github.ref }}
-        release_name: Release ${{ github.ref }}
+        release_name: Release ${{ github.ref_type }}
         body: |
-          This is the release for version ${{ github.ref }}.
+          This is the release for version ${{ github.ref_type }}.
           It includes the following changes:
           - ...
           - ...
