@@ -17,3 +17,15 @@ jobs:
         TAG_NAME=v$(node -p "require('./package.json').version")
         git tag $TAG_NAME
         git push origin $TAG_NAME
+    - name: Create release
+      uses: actions/create-release@v1
+      with:
+        tag_name: $TAG_NAME
+        release_name: Release $TAG_NAME
+        body: |
+          This is the release for version $TAG_NAME.
+          It includes the following changes:
+          - ...
+          - ...
+        draft: false
+        prerelease: false
