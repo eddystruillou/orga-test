@@ -19,18 +19,10 @@ jobs:
         git tag $TAG_NAME
         git push origin $TAG_NAME
     - name: Create release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+      uses: "marvinpinto/action-automatic-releases@latest"
+      needs: [Create tag]
       with:
-        tag_name: |
-          $TAG_NAME
-          echo $TAG_NAME release
-        release_name: Release $TAG_NAME
-        body: |
-          This is the release for version ${{ github.ref_type }}.
-          It includes the following changes:
-          - ...
-          - ...
-        draft: false
+        repo_token: "${{ secrets.GITHUB_TOKEN }}"
+        automatic_release_tag: $TAG_NAME
+        title: Release $TAG_NAME
         prerelease: false
