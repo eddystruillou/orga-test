@@ -20,7 +20,6 @@ jobs:
         git push origin $TAG_NAME
     - name: Create release
       uses: "marvinpinto/action-automatic-releases@latest"
-      needs: [Create tag]
       with:
         repo_token: "${{ secrets.GITHUB_TOKEN }}"
         automatic_release_tag: $TAG_NAME
