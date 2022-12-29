@@ -1,15 +1,22 @@
-name: Create Release
+name: Create Tag
 
 on:
-  push:
-    tags:
-      - "v*.*.*"
+  pull_request:
+    branches: [main]
+    types: [closed]
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-      - name: Release
-        uses: softprops/action-gh-release@v1
+    - name: Checkout
+      uses: actions/checkout@v3
+    - name: Install dependencies
+      run: npm install
+    - name: Create and push tag
+      run: |
+        TAG_NAME=v$(node -p "require('./package.json').version")
+        git tag $TAG_NAME
+        git push origin $TAG_NAME
+    - name: Create Release
+      uses: softprops/action-gh-release@v1
