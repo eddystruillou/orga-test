@@ -18,10 +18,12 @@ jobs:
         echo $TAG_NAME tag
         git tag $TAG_NAME
         git push origin $TAG_NAME
+      env:
+        TAG_NAME: ${{ steps.create-tag.outputs.TAG_NAME }}
     - name: Create release
       uses: "marvinpinto/action-automatic-releases@latest"
       with:
         repo_token: "${{ secrets.GITHUB_TOKEN }}"
-        automatic_release_tag: $TAG_NAME
-        title: Release $TAG_NAME
+        automatic_release_tag: ${{ env.TAG_NAME }}
+        title: Release ${{ env.TAG_NAME }}
         prerelease: false
