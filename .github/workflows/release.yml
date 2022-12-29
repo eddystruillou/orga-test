@@ -1,21 +1,17 @@
-name: Create Release
-
-on:
-  pull_request:
-    branches:
-      - main
-    types: [closed]
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
     - run: npm install
+    - name: Create tag
+      run: |
+        TAG_NAME=v$(node -p "require('./package.json').version")
+        echo $TAG_NAME tag
+        git tag $TAG_NAME
+        git push origin $TAG_NAME
+      env:
+        TAG_NAME: ${{ steps.create-tag.outputs.TAG_NAME }}
     - name: Create release
       uses: "marvinpinto/action-automatic-releases@latest"
       with:
         repo_token: "${{ secrets.GITHUB_TOKEN }}"
-        automatic_release_tag: v$(node -p "require('./package.json').version")
-        title: Release v$(node -p "require('./package.json').version")
+        title: Release ${{ env.TAG_NAME }}
         prerelease: false
