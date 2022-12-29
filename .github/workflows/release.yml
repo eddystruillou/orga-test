@@ -2,20 +2,52 @@ name: Create Release
 
 on:
   pull_request:
-    branches:
-      - main
-    types: [closed]
+    branches: [ main ]
+    types: [ closed ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-    - run: npm install
-    - name: Create release
-      uses: "marvinpinto/action-automatic-releases@latest"
-      with:
-        repo_token: "${{ secrets.GITHUB_TOKEN }}"
-        automatic_release_tag: "latest"
-        title: Release v*
-        prerelease: false
+      # Vérifiez que la pull request a bien été fusionnée dans la branche principale
+      - name: Check branch
+        if: github.event.pull_request.merged == true
+        run: |
+          echo "Pull request successfully merged into main branch"
+      # Installez la dépendance jq
+      - name: Install dependencies
+        run: |
+          apt-get update
+          apt-get install -y jq
+      # Récupérez la version actuelle de votre projet à partir du fichier package.json
+      - name: Get current version
+        run: |
+          CURRENT_VERSION=$(jq -r ".version" package.json)
+          echo "Current version is $CURRENT_VERSION"
+      # Utilisez l'action marvinpinto/action-automatic-releases@latest pour créer une nouvelle release à partir de la version récupérée et du titre de la pull request
+      - name: Create release
+        uses: marvinpinto/action-automatic-releases@latest
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          version: "$CURRENT_VERSION"
+          release_name: "$CURRENT_VERSION"
+          body: "${{ github.event.pull_request.title }}"
+# on:
+#   pull_request:
+#     branches:
+#       - main
+#     types: [closed]
+
+# jobs:
+#   build:
+#     runs-on: ubuntu-latest
+#     steps:
+#     - uses: actions/checkout@v3
+#     - run: npm install
+#     - name: Create release
+#       uses: "marvinpinto/action-automatic-releases@latest"
+#       with:
+#         repo_token: "${{ secrets.GITHUB_TOKEN }}"
+#         automatic_release_tag: "latest"
+#         title: Release v*
+#         prerelease: false
