@@ -28,9 +28,9 @@ jobs:
         uses: marvinpinto/action-automatic-releases@latest
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          version: "$CURRENT_VERSION"
-          release_name: "$CURRENT_VERSION"
-          body: "${{ github.event.pull_request.title }}"
+          automatic_release_tag: "v$CURRENT_VERSION"
+          title: "Release v$CURRENT_VERSION"
+          prerelease: false
 # on:
 #   pull_request:
 #     branches:
