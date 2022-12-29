@@ -14,14 +14,10 @@ jobs:
         if: github.event.pull_request.merged == true
         run: |
           echo "Pull request successfully merged into main branch"
-      # Installez la dépendance jq
-      - name: Install dependencies
-        run: |
-          npm install -y jq
       # Récupérez la version actuelle de votre projet à partir du fichier package.json
       - name: Get current version
         run: |
-          CURRENT_VERSION=$(jq -r ".version" package.json)
+          CURRENT_VERSION=$(node -pe "require('./package.json').version")
           echo "Current version is $CURRENT_VERSION"
       # Utilisez l'action marvinpinto/action-automatic-releases@latest pour créer une nouvelle release à partir de la version récupérée et du titre de la pull request
       - name: Create release
