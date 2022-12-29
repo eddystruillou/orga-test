@@ -20,3 +20,6 @@ jobs:
         git push origin $TAG_NAME
     - name: Create Release
       uses: softprops/action-gh-release@v1
+      with:
+        token: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
+        prerelease: false
