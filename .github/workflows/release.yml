@@ -18,9 +18,19 @@ jobs:
         TAG_NAME=v$(node -p "require('./package.json').version")
         git tag $TAG_NAME
         git push origin $TAG_NAME
-    - name: Create Release
+    # Récupération du nom du tag git créé à l'étape précédente par
+    # le Maven-release-plugin (qui sera donc ici l'avant dernier commit=> HEAD~)
+    # 
+    # Le format du tag (ex: préfixe avec 'v') est défini dans le pom.xml,
+    # on ne souhaite donc pas le répéter ici pour des raisons de maintenance.
+    - name: Get tag name
+      id: tag-name
+      run: |
+           export TAG=$(git describe --tags --abbrev=0 HEAD~)
+           echo "::set-output name=TAG::$TAG"
+    
+    # Création d'une Release Github
+    - name: Publish Github Release
       uses: softprops/action-gh-release@v1
       with:
-        token: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
-        tag_name: ${{ github.ref }}
-        prerelease: false
+        tag_name: ${{ steps.tag-name.outputs.TAG }} # On récupère le tag extrait au step précédent.
