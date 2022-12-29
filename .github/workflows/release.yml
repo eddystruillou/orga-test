@@ -9,6 +9,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v3
+      - run: npm install
       # Vérifiez que la pull request a bien été fusionnée dans la branche principale
       - name: Check branch
         if: github.event.pull_request.merged == true
