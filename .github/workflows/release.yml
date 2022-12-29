@@ -17,8 +17,7 @@ jobs:
       # Installez la dépendance jq
       - name: Install dependencies
         run: |
-          apt-get update
-          apt-get install -y jq
+          npm install -y jq
       # Récupérez la version actuelle de votre projet à partir du fichier package.json
       - name: Get current version
         run: |
