@@ -17,6 +17,7 @@ jobs:
       with:
         script: |
           const pullRequest = context.payload.pull_request;
+          console.log(context.payload.pull_request);
           const files = await github.rest.pulls.listFiles({
             owner: pullRequest.base.repo.owner.login,
             repo: pullRequest.base.repo.name,
