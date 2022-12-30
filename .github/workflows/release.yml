@@ -1,4 +1,4 @@
-name: Create Tag
+name: Create Tag and Release
 
 on:
   pull_request:
@@ -9,6 +9,23 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+    # Vérification de la modification du fichier package.json
+    - name: Check if package.json was modified
+      uses: actions/github-script@v6
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        script: |
+          const pullRequest = context.payload.pull_request;
+          const files = await context.github.pulls.listFiles({
+            owner: pullRequest.base.repo.owner.login,
+            repo: pullRequest.base.repo.name,
+            pull_number: pullRequest.number
+          });
+          if (!files.data.some(f => f.filename === 'package.json')) {
+            console.log('package.json was not modified in this pull request, skipping workflow');
+            process.exit(1);
+          }
     # Checkout
     - name: Checkout
       uses: actions/checkout@v3
